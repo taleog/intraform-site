@@ -3,136 +3,94 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Intraform Chatbot Demo</title>
-  <meta name="description" content="Live FAQ AI Chatbot demo with user story presets." />
+  <title>Intraform — Chatbot Demo</title>
+  <meta name="description" content="Live Intraform FAQ chatbot demo with business scenario presets." />
+  <meta name="theme-color" content="#030303">
   <link rel="icon" type="image/png" href="intraform-icon.png" />
-  <style>
-    :root { --bg:#0b1720; --card:#142532; --panel:#0e1c26; --panel-2:#13232f; --text:#e9f1f5; --muted:#9fb2bd; --accent:#26e0b3; --ring:#1f4b3f; --msg-user:#1a3a47; --msg-bot:#142532; }
-    *, *::before, *::after { box-sizing: border-box; }
-    html,body { margin:0; background:radial-gradient(circle at 25% 15%, #123040 0%, #09141b 70%) fixed, var(--bg); color:var(--text); font-family:system-ui,Segoe UI,Roboto,Inter,sans-serif; -webkit-font-smoothing:antialiased; height:100%; }
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-
-    .page-wrap { max-width:1180px; margin:0 auto; padding:24px clamp(18px,4vw,52px) 24px; min-height:100vh; display:flex; flex-direction:column; }
-
-    nav.breadcrumb { font-size:13px; color:var(--muted); margin-bottom:10px; }
-    nav.breadcrumb a { color:var(--muted); text-decoration:none; }
-
-    .title h1 { margin:0; font-size:clamp(26px,4vw,42px); line-height:1.05; letter-spacing:-.5px; background:linear-gradient(90deg,#e9f1f5,#7de7cd); -webkit-background-clip:text; background-clip:text; color:transparent; }
-    .badge-live { display:inline-flex;align-items:center;gap:6px;background:#113029;border:1px solid var(--ring);color:#65f0c8;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:600;letter-spacing:.5px; }
-    p.sub { color:var(--muted); margin:10px 0 14px; max-width:700px; line-height:1.5; font-size:15px; }
-
-    /* Preset cards — compact, inline row */
-    .preset-row { display:flex; gap:12px; margin:0 0 20px; flex-wrap:wrap; }
-    .preset-btn { display:flex; align-items:center; gap:10px; cursor:pointer; background:linear-gradient(155deg,#142a37,#0f242f 65%); border:1px solid #1f3848; border-radius:14px; padding:14px 18px; transition: border-color .25s, background .25s; font-size:14px; color:var(--text); }
-    .preset-btn:hover { border-color:#2a566a; background:linear-gradient(155deg,#173a49,#112d38 65%); }
-    .preset-btn.active { border-color:var(--accent); box-shadow:0 0 0 1px var(--ring); }
-    .preset-btn .icon { font-size:24px; line-height:1; }
-    .preset-btn .label { font-weight:600; white-space:nowrap; }
-
-    /* Chat panel — fills remaining space */
-    .chat-panel {
-      flex:1; display:flex; flex-direction:column;
-      background: var(--panel); border:1px solid #1f3848; border-radius:18px; overflow:hidden;
-      box-shadow: 0 8px 32px rgba(0,0,0,.4);
-      min-height: 320px;
-    }
-    .chat-header {
-      background: linear-gradient(180deg, var(--panel-2), #0f202b);
-      border-bottom:1px solid #1f3848; padding:12px 18px;
-      display:flex; align-items:center; justify-content:space-between; flex-shrink:0;
-    }
-    .chat-header__title { font-weight:700; font-size:14px; display:flex; align-items:center; gap:8px; }
-    .chat-pill { font-size:11px; padding:2px 8px; border-radius:999px; border:1px solid #284658; background:#102632; color:#a6e7d7; }
-    .chat-reset { background:#1b3341; color:#d8f6ef; border:1px solid #284658; border-radius:10px; padding:5px 10px; cursor:pointer; font-size:11px; font-weight:700; }
-    .chat-reset:hover { filter:brightness(1.1); }
-
-    .chat-msgs {
-      flex:1; overflow-y:auto; padding:14px 18px;
-      display:flex; flex-direction:column; gap:10px;
-      scroll-behavior:smooth;
-    }
-    .chat-msgs:empty::after {
-      content:'Select a scenario, then type a question to start chatting.';
-      display:block; text-align:center; color:var(--muted); font-size:14px;
-      margin-top:50px; line-height:1.5;
-    }
-
-    .msg { max-width:88%; padding:9px 13px; border-radius:14px; font-size:14px; line-height:1.5; animation: fadeIn .2s ease; }
-    .msg.user { align-self:flex-end; background:var(--msg-user); border:1px solid #1f4b5a; }
-    .msg.bot { align-self:flex-start; background:var(--msg-bot); border:1px solid #1f3848; }
-
-    .chat-bar {
-      border-top:1px solid #1f3848; padding:10px 14px;
-      display:flex; gap:8px; background:var(--panel-2); flex-shrink:0;
-    }
-    .chat-input { flex:1; background:#0a1a24; border:1px solid #1f3848; border-radius:10px; padding:9px 12px; color:var(--text); font-size:14px; outline:none; font-family:inherit; }
-    .chat-input:focus { border-color:var(--accent); }
-    .chat-input::placeholder { color:#5a7a88; }
-    .chat-send { background:var(--accent); color:#052b24; border:none; border-radius:10px; padding:9px 16px; font-weight:700; cursor:pointer; font-size:14px; white-space:nowrap; }
-    .chat-send:disabled { opacity:.4; cursor:not-allowed; }
-
-    .typing-dots { display:flex; gap:4px; padding:3px 0; }
-    .typing-dots span { width:5px; height:5px; border-radius:50%; background:var(--muted); animation:pulse 1.4s infinite; }
-    .typing-dots span:nth-child(2) { animation-delay:.2s; }
-    .typing-dots span:nth-child(3) { animation-delay:.4s; }
-
-    footer { margin:20px 0 0; text-align:center; font-size:13px; color:#7b8d98; flex-shrink:0; }
-
-    @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
-    @keyframes pulse { 0%, 80%, 100% { opacity:.3; } 40% { opacity:1; } }
-  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/2026.css">
 </head>
-<body>
-  <div class="page-wrap">
-    <nav class="breadcrumb" aria-label="Breadcrumb"><a href="index.html">Home</a> › <a href="demo.html">Demo Center</a> › Chatbot</nav>
+<body class="chatbot-page">
+  <a href="#main" class="skip-link">Skip to main</a>
+  <div class="grain" aria-hidden="true"></div>
+  <canvas id="formationCanvas" aria-hidden="true"></canvas>
 
-    <div class="title" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:2px;">
-      <h1>Chatbot Demo</h1>
-      <span class="badge-live">● Live</span>
-      <span style="font-size:11px;background:#162f3a;border:1px solid #224657;border-radius:999px;padding:3px 8px;color:#7fdcc4;font-weight:600;">RAG • DeepSeek-V4-Flash</span>
+  <nav class="nav" aria-label="Primary">
+    <div class="nav-inner">
+      <a href="index.html" class="logo" aria-label="Intraform home">
+        <span class="logo-mark">in</span>
+        <span>Intraform</span>
+      </a>
+      <div class="nav-right">
+        <a href="index.html#agents" class="nav-link">Agents</a>
+        <a href="index.html#method" class="nav-link">Method</a>
+        <a href="demo.html" class="nav-link">Demos</a>
+        <a href="index.html#contact" class="nav-link nav-cta">Book a call</a>
+      </div>
+      <button class="menu-btn" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
     </div>
-    <p class="sub">Pick a scenario, then ask any question. Answers are grounded in the knowledge base only.</p>
+  </nav>
 
-    <!-- Preset row — compact -->
-    <div class="preset-row">
-      <button class="preset-btn active" data-preset="coffee">
-        <span class="icon">☕</span>
-        <span class="label">Coffee Shop</span>
-      </button>
-      <button class="preset-btn" data-preset="intraform">
-        <span class="icon">⚡</span>
-        <span class="label">Intraform Dogfood</span>
-      </button>
-      <button class="preset-btn" data-preset="dental">
-        <span class="icon">🦷</span>
-        <span class="label">Dental Clinic</span>
-      </button>
-      <button class="preset-btn" data-preset="ecom">
-        <span class="icon">🛒</span>
-        <span class="label">E‑commerce</span>
-      </button>
-    </div>
-
-    <!-- Chat panel — flex fill -->
-    <div class="chat-panel" id="chatPanel">
-      <div class="chat-header">
-        <div class="chat-header__title">
-          <span>🤖 Intraform</span>
-          <span class="chat-pill" id="presetPill">Coffee Shop</span>
+  <main id="main" class="chatbot-main">
+    <section class="chatbot-shell">
+      <div class="chatbot-intro" data-reveal>
+        <div class="hero-kicker">
+          <span>CHATBOT DEMO</span>
+          <span>LIVE KNOWLEDGE BASE</span>
         </div>
-        <button class="chat-reset" id="resetBtn">Reset</button>
+        <h1>Ask a business-specific agent.</h1>
+        <p>Choose a scenario, then ask a real customer question. The demo is designed to answer from approved business data and stay inside its lane.</p>
+        <div class="chatbot-meta-row">
+          <span>RAG</span>
+          <span>Scenario presets</span>
+          <span>Live API</span>
+        </div>
       </div>
-      <div class="chat-msgs" id="chatMsgs" role="log" aria-live="polite"></div>
-      <div class="chat-bar">
-        <input class="chat-input" id="chatInput" type="text" maxlength="10000" placeholder="Ask about hours, menu, policies…" autocomplete="off" />
-        <button class="chat-send" id="sendBtn">Send</button>
+
+      <div class="chatbot-workspace" data-reveal>
+        <aside class="preset-panel" aria-label="Scenario presets">
+          <div class="preset-panel-head">
+            <span class="eyebrow">Scenarios</span>
+            <p>Switch the business context.</p>
+          </div>
+          <div class="preset-row">
+            <button class="preset-btn active" data-preset="coffee"><span class="preset-num">01</span><span class="label">Coffee Shop</span></button>
+            <button class="preset-btn" data-preset="intraform"><span class="preset-num">02</span><span class="label">Intraform Dogfood</span></button>
+            <button class="preset-btn" data-preset="dental"><span class="preset-num">03</span><span class="label">Dental Clinic</span></button>
+            <button class="preset-btn" data-preset="ecom"><span class="preset-num">04</span><span class="label">E-commerce</span></button>
+          </div>
+        </aside>
+
+        <section class="chat-panel" id="chatPanel" aria-label="Chatbot conversation">
+          <div class="chat-header">
+            <div class="chat-header__title">
+              <span>Intraform agent</span>
+              <span class="chat-pill" id="presetPill">Coffee Shop</span>
+            </div>
+            <button class="chat-reset" id="resetBtn">Reset</button>
+          </div>
+          <div class="chat-msgs" id="chatMsgs" role="log" aria-live="polite"></div>
+          <div class="chat-bar">
+            <input class="chat-input" id="chatInput" type="text" maxlength="10000" placeholder="Ask about hours, menu, policies…" autocomplete="off" />
+            <button class="chat-send" id="sendBtn">Send</button>
+          </div>
+        </section>
       </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand"><span class="logo-mark">in</span><span>Intraform</span></div>
+      <p>Smarter agents. Simpler automation.</p>
+      <div class="footer-links"><a href="demo.html">Demo Center</a><a href="privacy.html">Privacy</a></div>
+      <p class="copy">© 2026 Intraform</p>
     </div>
+  </footer>
 
-    <footer>&copy; 2025 Intraform</footer>
-  </div>
-
+  <script src="js/2026.js" defer></script>
   <script>
     (function() {
       const params = new URLSearchParams(location.search);
@@ -151,7 +109,7 @@
         return p==='coffee'?'Coffee Shop'
           :p==='intraform'?'Intraform Dogfood'
           :p==='dental'?'Dental Clinic'
-          :p==='ecom'?'E‑commerce'
+          :p==='ecom'?'E-commerce'
           :p;
       }
 
