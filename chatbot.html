@@ -100,6 +100,10 @@
         <span class="icon">☕</span>
         <span class="label">Coffee Shop</span>
       </button>
+      <button class="preset-btn" data-preset="vetracore">
+        <span class="icon">⚡</span>
+        <span class="label">VetraCore Dogfood</span>
+      </button>
       <button class="preset-btn" data-preset="dental">
         <span class="icon">🦷</span>
         <span class="label">Dental Clinic</span>
@@ -121,7 +125,7 @@
       </div>
       <div class="chat-msgs" id="chatMsgs" role="log" aria-live="polite"></div>
       <div class="chat-bar">
-        <input class="chat-input" id="chatInput" type="text" placeholder="Ask about hours, menu, policies…" autocomplete="off" />
+        <input class="chat-input" id="chatInput" type="text" maxlength="10000" placeholder="Ask about hours, menu, policies…" autocomplete="off" />
         <button class="chat-send" id="sendBtn">Send</button>
       </div>
     </div>
@@ -131,7 +135,8 @@
 
   <script>
     (function() {
-      const API = 'http://' + location.hostname + ':8002';
+      const params = new URLSearchParams(location.search);
+      const API = params.get('api') || '';
       const msgs = document.getElementById('chatMsgs');
       const inp  = document.getElementById('chatInput');
       const snd  = document.getElementById('sendBtn');
@@ -142,7 +147,23 @@
       let sid = null;
       let cur = 'coffee';
 
-      function label(p) { return p==='coffee'?'Coffee Shop':p==='dental'?'Dental Clinic':p==='ecom'?'E‑commerce':p; }
+      function label(p) {
+        return p==='coffee'?'Coffee Shop'
+          :p==='vetracore'?'VetraCore Dogfood'
+          :p==='dental'?'Dental Clinic'
+          :p==='ecom'?'E‑commerce'
+          :p;
+      }
+
+      function placeholder(p) {
+        return p==='vetracore'
+          ? 'Ask what VetraCore does, pricing, or how to book…'
+          : p==='dental'
+            ? 'Ask about appointments, insurance, whitening…'
+            : p==='ecom'
+              ? 'Ask about shipping, returns, orders…'
+              : 'Ask about hours, menu, policies…';
+      }
 
       function scrollBot() { msgs.scrollTop = msgs.scrollHeight; }
 
@@ -171,6 +192,7 @@
         btns.forEach(b => b.classList.toggle('active', b.dataset.preset === name));
         cur = name;
         pill.textContent = label(name);
+        inp.placeholder = placeholder(name);
         if (sid) fetch(API + '/reset?session_id=' + encodeURIComponent(sid), { method:'POST' }).catch(()=>{});
         sid = null;
         msgs.innerHTML = '';
@@ -209,7 +231,7 @@
       });
       btns.forEach(b => b.addEventListener('click', () => { setPreset(b.dataset.preset); inp.focus(); }));
 
-      const m = (location.hash||'').toLowerCase().match(/^#chat-(coffee|dental|ecom)$/);
+      const m = (location.hash||'').toLowerCase().match(/^#chat-(coffee|vetracore|dental|ecom)$/);
       if (m) setPreset(m[1]);
       inp.focus();
     })();

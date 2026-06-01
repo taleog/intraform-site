@@ -31,7 +31,7 @@ function findFaqAnswer(input) {
   for (const faq of FAQS) {
     if (faq.q.some(q => text.includes(q))) return faq.a;
   }
-  return "I'm here to help! Please ask about our services, pricing, implementation, integration, privacy, or how to get started.";
+  return "I'm not confident I can answer that. Please reach our team directly: email hello@vetracore.ca, call +1 (775) 429-7429, or use the contact form.";
 }
 
 document.addEventListener('DOMContentLoaded', function () {
