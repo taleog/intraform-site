@@ -50,6 +50,7 @@
     const title = $('[data-morph-title]');
     const copy = $('[data-morph-copy]');
     const nodes = $$('.signal-node');
+    const system = $('.signal-system');
     const steps = $$('.transform-step');
     if (!section || !title || !copy || !steps.length) return;
 

@@ -98,6 +98,7 @@
       const API = apiOverride || (location.protocol === 'file:'
         ? 'http://127.0.0.1:8002'
         : `${location.protocol}//${location.hostname}:8002`);
+      const liveApiEnabled = Boolean(apiOverride) || !/^(www\.)?intraform\.ca$/i.test(location.hostname);
       const msgs = document.getElementById('chatMsgs');
       const inp  = document.getElementById('chatInput');
       const snd  = document.getElementById('sendBtn');
@@ -107,6 +108,36 @@
 
       let sid = null;
       let cur = 'coffee';
+
+      const fallbackAnswers = {
+        coffee: [
+          [/hour|open|close|saturday|sunday/i, 'The coffee shop demo is open Monday–Friday 7 AM–6 PM and Saturday–Sunday 8 AM–3 PM.'],
+          [/menu|drink|coffee|latte|espresso|food|pastry/i, 'The demo menu includes espresso, drip coffee, lattes, cold brew, tea, pastries, and light breakfast items.'],
+          [/book|reservation|table|reserve/i, 'For the coffee shop demo, customers can ask about availability and the agent can route booking requests to the team.']
+        ],
+        intraform: [
+          [/what|do|service|intraform|agent|automation/i, 'Intraform builds practical AI chat, voice, and follow-up agents for small businesses.'],
+          [/price|cost|pricing|package/i, 'Pricing depends on the workflow and integrations. The recommended next step is a short consult so we can scope the smallest useful automation.'],
+          [/book|call|contact|demo/i, 'You can book a consult from the contact section or email hello@intraform.ca.']
+        ],
+        dental: [
+          [/appointment|book|schedule|cleaning/i, 'The dental clinic demo can answer appointment questions and collect booking intent for staff follow-up.'],
+          [/insurance|coverage|benefit/i, 'The dental demo can explain accepted insurance at a high level and route plan-specific questions to the clinic team.'],
+          [/emergency|pain|urgent/i, 'For urgent dental issues, the demo would route the customer to call the clinic directly or follow emergency instructions.']
+        ],
+        ecom: [
+          [/shipping|ship|delivery|deliver/i, 'The e-commerce demo can answer shipping timelines, delivery policy, and order-status questions.'],
+          [/return|refund|exchange/i, 'The e-commerce demo can explain return and exchange policies and collect details for support.'],
+          [/order|tracking|track/i, 'For order tracking, the demo would collect the order number and route the request to the right system or team.']
+        ]
+      };
+
+      function fallbackReply(message, preset) {
+        const bank = fallbackAnswers[preset] || fallbackAnswers.coffee;
+        const hit = bank.find(([pattern]) => pattern.test(message));
+        if (hit) return hit[1];
+        return `Demo fallback: I can answer sample ${label(preset)} questions about hours, services, bookings, policies, and handoffs. The live API is not reachable from this page right now.`;
+      }
 
       function label(p) {
         return p==='coffee'?'Coffee Shop'
@@ -167,6 +198,13 @@
         add(t, 'user');
         typing(true);
         try {
+          if (!liveApiEnabled) {
+            typing(false);
+            add(fallbackReply(t, cur), 'bot');
+            snd.disabled = false;
+            inp.focus();
+            return;
+          }
           const r = await fetch(API + '/chat', {
             method:'POST',
             headers:{'Content-Type':'application/json'},
@@ -175,14 +213,14 @@
           const d = await r.json().catch(() => ({}));
           typing(false);
           if (!r.ok) {
-            add(d.detail || d.error || `Chatbot API returned HTTP ${r.status}.`, 'bot');
+            add(fallbackReply(t, cur), 'bot');
           } else {
             sid = d.session_id;
-            add(d.reply || 'No reply returned by the chatbot API.', 'bot');
+            add(d.reply || fallbackReply(t, cur), 'bot');
           }
         } catch(e) {
           typing(false);
-          add('Could not connect to the chatbot server. Is it running?', 'bot');
+          add(fallbackReply(t, cur), 'bot');
         }
         snd.disabled = false;
         inp.focus();
