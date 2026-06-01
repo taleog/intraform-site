@@ -57,7 +57,7 @@
           </div>
           <div class="preset-row">
             <button class="preset-btn active" data-preset="coffee"><span class="preset-num">01</span><span class="label">Coffee Shop</span></button>
-            <button class="preset-btn" data-preset="intraform"><span class="preset-num">02</span><span class="label">Intraform Dogfood</span></button>
+            <button class="preset-btn" data-preset="intraform"><span class="preset-num">02</span><span class="label">Intraform</span></button>
             <button class="preset-btn" data-preset="dental"><span class="preset-num">03</span><span class="label">Dental Clinic</span></button>
             <button class="preset-btn" data-preset="ecom"><span class="preset-num">04</span><span class="label">E-commerce</span></button>
           </div>
@@ -116,6 +116,7 @@
           [/book|reservation|table|reserve/i, 'For the coffee shop demo, customers can ask about availability and the agent can route booking requests to the team.']
         ],
         intraform: [
+          [/hour|open|close|available|availability|when/i, 'Intraform is available by appointment. Send a message through the contact form or email hello@intraform.ca and we aim to respond within 24 hours.'],
           [/what|do|service|intraform|agent|automation/i, 'Intraform builds practical AI chat, voice, and follow-up agents for small businesses.'],
           [/price|cost|pricing|package/i, 'Pricing depends on the workflow and integrations. The recommended next step is a short consult so we can scope the smallest useful automation.'],
           [/book|call|contact|demo/i, 'You can book a consult from the contact section or email hello@intraform.ca.']
@@ -136,12 +137,12 @@
         const bank = fallbackAnswers[preset] || fallbackAnswers.coffee;
         const hit = bank.find(([pattern]) => pattern.test(message));
         if (hit) return hit[1];
-        return `Demo fallback: I can answer sample ${label(preset)} questions about hours, services, bookings, policies, and handoffs. The live API is not reachable from this page right now.`;
+        return `I can answer sample ${label(preset)} questions about hours, services, bookings, policies, and handoffs. Try asking about what we do, pricing, booking, or common customer questions.`;
       }
 
       function label(p) {
         return p==='coffee'?'Coffee Shop'
-          :p==='intraform'?'Intraform Dogfood'
+          :p==='intraform'?'Intraform'
           :p==='dental'?'Dental Clinic'
           :p==='ecom'?'E-commerce'
           :p;
