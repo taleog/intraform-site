@@ -3,67 +3,85 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Intraform - Demo Center</title>
+  <title>Intraform — Demo Center</title>
   <meta name="description" content="Try Intraform AI agents: FAQ chatbot and voice agent demos.">
   <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#030303">
   <link rel="icon" type="image/png" href="intraform-icon.png" />
-  <link rel="stylesheet" href="css/main.css">
-  <style>
-    .demo-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:32px; margin:60px 0; }
-    .demo-card { background:#222a35; border-radius:22px; padding:40px 36px; box-shadow:0 8px 36px rgba(0,226,195,0.08); text-align:center; transition: transform .25s, box-shadow .25s; }
-    .demo-card:hover { transform:translateY(-6px); box-shadow:0 12px 42px rgba(0,226,195,0.15); }
-    .demo-card-icon { display:inline-flex; align-items:center; justify-content:center; min-width:76px; height:42px; padding:0 16px; border-radius:999px; margin-bottom:22px; background:rgba(0,226,195,.1); border:1px solid rgba(0,226,195,.22); color:#cffff7; font-size:14px; font-weight:800; letter-spacing:.08em; }
-    .demo-card h2 { color:#00e2c3; font-size:1.6rem; margin:0 0 12px; }
-    .demo-card p { color:#c8cedb; font-size:1rem; line-height:1.6; margin-bottom:24px; }
-    .section-intro { max-width:680px; margin:0 auto; text-align:center; }
-    .demo-title { font-size:2.6rem; font-weight:800; color:#00e2c3; margin-bottom:16px; }
-  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/2026.css">
 </head>
-<body>
-  <nav class="nav">
-    <div class="container nav-container">
-      <a href="index.html" class="logo"><span class="logo-gradient">Intraform</span></a>
-      <ul class="nav-links">
-        <li><a href="index.html#services" class="nav-link">Services</a></li>
-        <li><a href="index.html#benefits" class="nav-link">Benefits</a></li>
-        <li><a href="index.html#testimonials" class="nav-link">Use Cases</a></li>
-        <li><a href="index.html#implementation" class="nav-link">Implementation</a></li>
-        <li><a href="demo.html" class="nav-link">Demos</a></li>
-        <li><a href="index.html#contact" class="nav-link">Contact</a></li>
-      </ul>
+<body class="demo-page">
+  <a href="#main" class="skip-link">Skip to main</a>
+  <div class="grain" aria-hidden="true"></div>
+  <canvas id="formationCanvas" aria-hidden="true"></canvas>
+
+  <nav class="nav" aria-label="Primary">
+    <div class="nav-inner">
+      <a href="index.html" class="logo" aria-label="Intraform home">
+        <span class="logo-mark">in</span>
+        <span>Intraform</span>
+      </a>
+      <div class="nav-right">
+        <a href="index.html#agents" class="nav-link">Agents</a>
+        <a href="index.html#method" class="nav-link">Method</a>
+        <a href="demo.html" class="nav-link">Demos</a>
+        <a href="index.html#contact" class="nav-link nav-cta">Book a call</a>
+      </div>
+      <button class="menu-btn" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
     </div>
   </nav>
-  <main style="min-height: calc(100vh - 180px); display: flex; flex-direction: column;">
-    <section class="demo-landing" style="background: radial-gradient(circle at 70% 70%, #00a88477 0%, #181f2a 60%, #181f2a 100%); min-height: 100vh; display: flex; align-items: center;">
-      <div class="container" style="max-width: 960px; margin: 0 auto;">
-        <div class="section-intro">
-          <p style="color: #00e2c3; font-size: 0.95rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 18px;">Try It Yourself</p>
-          <h1 class="demo-title">Demo Center</h1>
-          <p style="color: #e3e8ef; font-size: 1.1rem; line-height: 1.7; margin-bottom: 0px;">Try our AI agents live. Select a demo below to see how Intraform can handle real customer conversations.</p>
+
+  <main id="main">
+    <section class="demo-hero">
+      <div class="demo-hero-inner">
+        <div class="hero-kicker">
+          <span>DEMO CENTER</span>
+          <span>VOICE / CHAT</span>
         </div>
-        <div class="demo-grid">
-          <div class="demo-card">
-            <div class="demo-card-icon">CHAT</div>
-            <h2>FAQ Chatbot</h2>
-            <p>Try our retrieval-augmented chatbot with preset scenarios: Intraform dogfood, coffee shop, dental clinic, or e-commerce. Ask questions and see AI responses grounded in approved business data.</p>
-            <a href="chatbot.html#chat-intraform" class="btn btn-primary" style="display:inline-block;">Try the Intraform Demo →</a>
-          </div>
-          <div class="demo-card">
-            <div class="demo-card-icon">VOICE</div>
-            <h2>Voice Agent</h2>
-            <p>Call our AI receptionist and hear how natural AI voice conversations can handle inquiries, collect intent, and provide information — just like a human team member.</p>
-            <a href="voice.html" class="btn btn-primary" style="display:inline-block;">Try the Voice Agent →</a>
-          </div>
-        </div>
+        <h1>Try the agents before we talk.</h1>
+        <p>Two simple demos: ask a grounded chatbot questions, or hear how an AI receptionist handles a real customer flow.</p>
+      </div>
+    </section>
+
+    <section class="demo-showcase" aria-label="Available demos">
+      <div class="demo-showcase-grid">
+        <a class="demo-feature-card" href="chatbot.html#chat-intraform" data-reveal>
+          <span class="demo-feature-index">01 / CHAT</span>
+          <h2>FAQ chatbot</h2>
+          <p>Ask questions against approved business data. Test how it handles services, pricing, policies, and practical customer scenarios.</p>
+          <span class="demo-feature-cta">Open chatbot demo →</span>
+        </a>
+        <a class="demo-feature-card is-voice" href="voice.html" data-reveal>
+          <span class="demo-feature-index">02 / VOICE</span>
+          <h2>AI receptionist</h2>
+          <p>Hear a receptionist-style call flow: collect intent, answer common questions, and route the next step without clutter.</p>
+          <span class="demo-feature-cta">Open voice demo →</span>
+        </a>
+      </div>
+    </section>
+
+    <section class="demo-note" aria-label="Demo note">
+      <div class="demo-note-panel" data-reveal>
+        <span class="eyebrow">What to look for</span>
+        <h2>Clean answers. Clear handoffs. No magic tricks.</h2>
+        <p>These demos are meant to show the shape of the experience — fast responses, business-specific context, and simple escalation paths.</p>
+        <a href="index.html#contact" class="btn btn-light">Book a consult <span>↗</span></a>
       </div>
     </section>
   </main>
+
   <footer>
-    <div class="container footer-content" style="border-top: 1px solid #222a35; margin-top: 48px; padding-top: 24px; text-align: center;">
-      <div class="footer-logo" style="color: #00e2c3; font-size: 2rem; font-weight: 700; margin-bottom: 8px;">Intraform</div>
-      <p class="footer-tagline" style="color: #b3b9c9; font-size: 1.08rem; margin-bottom: 4px;">Smarter agents. Simpler automation.</p>
-      <p class="copyright" style="color: #b3b9c9; font-size: 0.98rem;">&copy; 2025 Intraform. All rights reserved.</p>
+    <div class="footer-inner">
+      <div class="footer-brand"><span class="logo-mark">in</span><span>Intraform</span></div>
+      <p>Smarter agents. Simpler automation.</p>
+      <div class="footer-links"><a href="mailto:hello@intraform.ca">Contact</a><a href="privacy.html">Privacy</a></div>
+      <p class="copy">© 2026 Intraform</p>
     </div>
   </footer>
+
+  <script src="js/2026.js" defer></script>
 </body>
 </html>
