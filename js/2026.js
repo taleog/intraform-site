@@ -71,6 +71,7 @@
         title.textContent = `${data.title}.`;
         copy.textContent = data.copy;
         nodes.forEach((n, i) => n.classList.toggle('active', i <= idx));
+        if (system) system.dataset.stage = String(idx);
       }
       requestAnimationFrame(update);
     };
