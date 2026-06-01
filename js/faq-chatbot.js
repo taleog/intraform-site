@@ -1,4 +1,4 @@
-// Simple FAQ Chatbot Demo for VetraCore
+// Simple FAQ Chatbot Demo for Intraform
 const FAQS = [
   {
     q: ["what services do you offer", "what can you do", "services", "solutions"],
@@ -31,7 +31,7 @@ function findFaqAnswer(input) {
   for (const faq of FAQS) {
     if (faq.q.some(q => text.includes(q))) return faq.a;
   }
-  return "I'm not confident I can answer that. Please reach our team directly: email hello@vetracore.ca, call +1 (775) 429-7429, or use the contact form.";
+  return "I'm not confident I can answer that. Please reach our team directly: email hello@intraform.ca, call +1 (775) 429-7429, or use the contact form.";
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
     input.focus();
     // Only show welcome if no messages yet
     if (!messagesEl.hasChildNodes()) {
-      setTimeout(() => addBotMessage("Hi! I'm the VetraCore FAQ bot. How can I help you?"), 250);
+      setTimeout(() => addBotMessage("Hi! I'm the Intraform FAQ bot. How can I help you?"), 250);
     }
   }
   function hideChatbot() {

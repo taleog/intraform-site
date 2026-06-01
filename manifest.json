@@ -1,6 +1,6 @@
 {
-  "name": "VetraCore AI Agents",
-  "short_name": "VetraCore",
+  "name": "Intraform AI Agents",
+  "short_name": "Intraform",
   "description": "Custom AI voice and chat agents for small businesses",
   "start_url": "/",
   "display": "standalone",
@@ -8,12 +8,12 @@
   "theme_color": "#00e2c3",
   "icons": [
     {
-      "src": "vetracore-icon.png",
+      "src": "intraform-icon.png",
       "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "vetracore-icon.png",
+      "src": "intraform-icon.png",
       "sizes": "512x512",
       "type": "image/png"
     }

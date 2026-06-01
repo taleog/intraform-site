@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>VetraCore Chatbot Demo</title>
+  <title>Intraform Chatbot Demo</title>
   <meta name="description" content="Live FAQ AI Chatbot demo with user story presets." />
-  <link rel="icon" type="image/png" href="vetracore-icon.png" />
+  <link rel="icon" type="image/png" href="intraform-icon.png" />
   <style>
     :root { --bg:#0b1720; --card:#142532; --panel:#0e1c26; --panel-2:#13232f; --text:#e9f1f5; --muted:#9fb2bd; --accent:#26e0b3; --ring:#1f4b3f; --msg-user:#1a3a47; --msg-bot:#142532; }
     *, *::before, *::after { box-sizing: border-box; }
@@ -100,9 +100,9 @@
         <span class="icon">☕</span>
         <span class="label">Coffee Shop</span>
       </button>
-      <button class="preset-btn" data-preset="vetracore">
+      <button class="preset-btn" data-preset="intraform">
         <span class="icon">⚡</span>
-        <span class="label">VetraCore Dogfood</span>
+        <span class="label">Intraform Dogfood</span>
       </button>
       <button class="preset-btn" data-preset="dental">
         <span class="icon">🦷</span>
@@ -118,7 +118,7 @@
     <div class="chat-panel" id="chatPanel">
       <div class="chat-header">
         <div class="chat-header__title">
-          <span>🤖 VetraCore</span>
+          <span>🤖 Intraform</span>
           <span class="chat-pill" id="presetPill">Coffee Shop</span>
         </div>
         <button class="chat-reset" id="resetBtn">Reset</button>
@@ -130,7 +130,7 @@
       </div>
     </div>
 
-    <footer>&copy; 2025 VetraCore</footer>
+    <footer>&copy; 2025 Intraform</footer>
   </div>
 
   <script>
@@ -149,15 +149,15 @@
 
       function label(p) {
         return p==='coffee'?'Coffee Shop'
-          :p==='vetracore'?'VetraCore Dogfood'
+          :p==='intraform'?'Intraform Dogfood'
           :p==='dental'?'Dental Clinic'
           :p==='ecom'?'E‑commerce'
           :p;
       }
 
       function placeholder(p) {
-        return p==='vetracore'
-          ? 'Ask what VetraCore does, pricing, or how to book…'
+        return p==='intraform'
+          ? 'Ask what Intraform does, pricing, or how to book…'
           : p==='dental'
             ? 'Ask about appointments, insurance, whitening…'
             : p==='ecom'
@@ -231,7 +231,7 @@
       });
       btns.forEach(b => b.addEventListener('click', () => { setPreset(b.dataset.preset); inp.focus(); }));
 
-      const m = (location.hash||'').toLowerCase().match(/^#chat-(coffee|vetracore|dental|ecom)$/);
+      const m = (location.hash||'').toLowerCase().match(/^#chat-(coffee|intraform|dental|ecom)$/);
       if (m) setPreset(m[1]);
       inp.focus();
     })();
