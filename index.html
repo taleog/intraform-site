@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Intraform — AI agents for small businesses</title>
   <meta name="description" content="Custom AI voice and chat agents for small businesses. Built around your workflows, not the other way around.">
-  <meta name="theme-color" content="#05080c">
+  <meta name="theme-color" content="#030303">
   <meta property="og:title" content="Intraform">
   <meta property="og:description" content="Custom AI agents for small businesses.">
   <meta property="og:url" content="https://intraform.ca/">
@@ -16,275 +16,174 @@
   <link rel="icon" type="image/png" href="intraform-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/2026.css">
 </head>
 <body>
   <a href="#main" class="skip-link">Skip to main</a>
+  <div class="grain" aria-hidden="true"></div>
+  <canvas id="formationCanvas" aria-hidden="true"></canvas>
 
-  <nav class="nav">
+  <nav class="nav" aria-label="Primary">
     <div class="nav-inner">
-      <a href="/" class="logo">
-        <span class="logo-mark">I</span>
+      <a href="/" class="logo" aria-label="Intraform home">
+        <span class="logo-mark">in</span>
         <span>Intraform</span>
       </a>
       <div class="nav-right">
-        <a href="#services" class="nav-link">Services</a>
-        <a href="#process" class="nav-link">Process</a>
+        <a href="#agents" class="nav-link">Agents</a>
+        <a href="#method" class="nav-link">Method</a>
         <a href="demo.html" class="nav-link">Demos</a>
         <a href="#contact" class="nav-link nav-cta">Book a call</a>
       </div>
-      <button class="menu-btn" aria-label="Menu">≡</button>
+      <button class="menu-btn" aria-label="Open menu" aria-expanded="false"><span></span><span></span></button>
     </div>
   </nav>
 
   <main id="main">
-    <section class="hero">
-      <div class="container">
-        <div class="hero-text">
-          <span class="label">Local AI automation</span>
-          <h1>Custom AI agents for<br>small businesses.</h1>
-          <p class="sub">Smarter agents. Simpler automation.</p>
-          <div class="hero-actions">
-            <a href="demo.html" class="btn btn-primary">
-              Try the demos
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </a>
-            <a href="#contact" class="btn btn-outline">Book a consult</a>
-          </div>
+    <section class="hero" data-scene="01">
+      <div class="hero-shell">
+        <div class="hero-kicker">
+          <span>LOCAL AI AUTOMATION</span>
+          <span>MONTRÉAL / REMOTE</span>
         </div>
-        <div class="hero-board">
-          <div class="board-card">
-            <div class="board-head">
-              <span class="board-label">Agents</span>
-              <span class="board-pill"><span class="dot"></span>Online</span>
-            </div>
-            <div class="board-rows">
-              <div class="board-row active">
-                <span class="initial">C</span>
-                <div><strong>Coffee Shop FAQ</strong><span>12 convos today</span></div>
-                <span class="tag">Active</span>
-              </div>
-              <div class="board-row">
-                <span class="initial">V</span>
-                <div><strong>Dental Receptionist</strong><span>8 calls routed</span></div>
-                <span class="tag dim">Idle</span>
-              </div>
-              <div class="board-row active">
-                <span class="initial">F</span>
-                <div><strong>Follow-up Agent</strong><span>24 reminders sent</span></div>
-                <span class="tag">Active</span>
-              </div>
-            </div>
-            <div class="board-chat">
-              <div class="msg left"><span>You</span><p>What time do you open Saturdays?</p></div>
-              <div class="msg right"><span>Intraform</span><p>8 AM to 2 PM. Want to book a table?</p></div>
-            </div>
-            <div class="board-metrics">
-              <div><strong>2.4k+</strong><span>Answered</span></div>
-              <div><strong>96%</strong><span>Resolved</span></div>
-              <div><strong>&lt;3s</strong><span>Response</span></div>
-            </div>
-          </div>
+        <h1>
+          <span>AI agents that</span>
+          <span class="word-rail" aria-label="answer, route, follow up, transform">
+            <span>answer</span><span>route</span><span>follow up</span><span>transform</span><span>answer</span>
+          </span>
+          <span>while you work.</span>
+        </h1>
+        <p class="hero-sub">Custom voice, chat, and follow-up systems for small businesses that need fewer missed calls, faster replies, and cleaner handoffs.</p>
+        <div class="hero-actions">
+          <a href="#contact" class="btn btn-light">Book a consult <span>↗</span></a>
+          <a href="demo.html" class="btn btn-dark">Try the demos</a>
+        </div>
+      </div>
+      <div class="scroll-cue" aria-hidden="true"><span></span>scroll</div>
+    </section>
+
+    <section class="statement" aria-label="Intraform positioning">
+      <div class="statement-grid">
+        <p class="statement-lead" data-reveal>We don't sell a generic bot. We build a clean layer between your customers, your staff, and the repetitive work that slows both down.</p>
+        <div class="statement-copy" data-reveal>
+          <p>Every Intraform agent is shaped around the exact information it needs to know, the moments it must escalate, and the tone your customers should hear.</p>
+          <p>The result feels simple on the outside — and structured underneath.</p>
         </div>
       </div>
     </section>
 
-    <section class="services" id="services">
-      <div class="container narrow">
-        <span class="label">What we build</span>
-        <h2>Three agents, one workflow.</h2>
-        <p class="lede">Each agent handles a real customer interaction that happens every day in local businesses. Pick one, or run them together.</p>
-        <div class="svc-grid">
-          <article class="svc-card" data-reveal>
-            <div class="svc-icon">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"/></svg>
-            </div>
-            <h3>FAQ Chatbot</h3>
-            <p>Trained on your services, pricing, and policies. Embed it on your site and your customers get answers instantly.</p>
-          </article>
-          <article class="svc-card" data-reveal>
-            <div class="svc-icon">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
-            </div>
-            <h3>AI Receptionist</h3>
-            <p>Answers calls, collects intent, and routes requests when your team is busy or closed. Natural voice, no scripts.</p>
-          </article>
-          <article class="svc-card" data-reveal>
-            <div class="svc-icon">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
-            </div>
-            <h3>Follow-up Agent</h3>
-            <p>Qualifies inquiries, sends reminders, and nudges potential customers toward a booking before they go cold.</p>
-          </article>
-        </div>
+    <section class="agents" id="agents">
+      <div class="section-head" data-reveal>
+        <span class="eyebrow">What we build</span>
+        <h2>Three customer-facing agents. One operating rhythm.</h2>
+      </div>
+      <div class="agent-grid">
+        <article class="agent-card" data-reveal>
+          <span class="card-index">01</span>
+          <h3>FAQ chatbot</h3>
+          <p>Answers questions from your real services, pricing, policies, and availability — embedded directly on your website.</p>
+          <a href="chatbot.html">Open demo</a>
+        </article>
+        <article class="agent-card tall" data-reveal>
+          <span class="card-index">02</span>
+          <h3>AI receptionist</h3>
+          <p>Handles calls when your team is busy or closed, gathers intent, and routes the next step without pretending to be human.</p>
+          <a href="voice.html">Hear it</a>
+        </article>
+        <article class="agent-card" data-reveal>
+          <span class="card-index">03</span>
+          <h3>Follow-up agent</h3>
+          <p>Keeps inquiries warm with reminders, qualification, and booking nudges before the conversation disappears.</p>
+          <a href="#contact">Start here</a>
+        </article>
       </div>
     </section>
 
-    <section class="problems" id="benefits">
-      <div class="container narrow">
-        <span class="label">What we fix</span>
-        <h2>Three problems, one solution.</h2>
-        <div class="prob-grid">
-          <div class="prob-card" data-reveal>
-            <span class="prob-num">01</span>
-            <h3>Missed calls & slow replies</h3>
-            <p>AI receptionists and chat agents capture customer intent even when you're busy or closed.</p>
-          </div>
-          <div class="prob-card" data-reveal>
-            <span class="prob-num">02</span>
-            <h3>Repeating the same answers</h3>
-            <p>Common questions get consistent answers without pulling your team away from actual work.</p>
-          </div>
-          <div class="prob-card" data-reveal>
-            <span class="prob-num">03</span>
-            <h3>Leads that go cold</h3>
-            <p>Follow-up agents keep inquiries moving toward a booking instead of sitting in an inbox.</p>
-          </div>
+    <section class="transform" aria-label="Scroll transformation">
+      <div class="transform-sticky">
+        <div class="transform-copy">
+          <span class="eyebrow">How it changes the day</span>
+          <h2 data-morph-title>Missed requests become handled requests.</h2>
+          <p data-morph-copy>Scroll through the workflow: each step takes a messy customer moment and turns it into a clean, logged action.</p>
         </div>
+        <div class="signal-system" aria-hidden="true">
+          <div class="signal-line"></div>
+          <div class="signal-node n1"><span>Question</span></div>
+          <div class="signal-node n2"><span>Intent</span></div>
+          <div class="signal-node n3"><span>Handoff</span></div>
+          <div class="signal-node n4"><span>Follow-up</span></div>
+          <div class="signal-core">IN</div>
+        </div>
+      </div>
+      <div class="transform-steps">
+        <div class="transform-step" data-morph="Capture|Customers ask. The agent collects the message, caller intent, and business context without making your team stop."></div>
+        <div class="transform-step" data-morph="Clarify|The agent checks the knowledge base, asks one useful question when needed, and keeps the conversation moving."></div>
+        <div class="transform-step" data-morph="Route|When a human should step in, the agent sends a concise handoff instead of a vague notification."></div>
+        <div class="transform-step" data-morph="Improve|Launch is not the finish line. Real conversations reveal what to tune next."></div>
       </div>
     </section>
 
-    <section class="process" id="process">
-      <div class="container narrow">
-        <span class="label">How it works</span>
-        <h2>Five steps, no surprises.</h2>
-        <div class="proc-steps">
-          <div class="proc-step" data-reveal>
-            <span class="proc-num">1</span>
-            <div>
-              <h3>Discovery</h3>
-              <p>We map the questions and calls that take the most time or get missed most often.</p>
-            </div>
-          </div>
-          <div class="proc-step" data-reveal>
-            <span class="proc-num">2</span>
-            <div>
-              <h3>Collect</h3>
-              <p>We gather your FAQs, scripts, policies, and routing rules so the agent fits your business.</p>
-            </div>
-          </div>
-          <div class="proc-step" data-reveal>
-            <span class="proc-num">3</span>
-            <div>
-              <h3>Build</h3>
-              <p>Your agent is configured around your workflows, tone, and escalation rules.</p>
-            </div>
-          </div>
-          <div class="proc-step" data-reveal>
-            <span class="proc-num">4</span>
-            <div>
-              <h3>Test</h3>
-              <p>We run common scenarios, edge cases, and handoffs before anything goes live.</p>
-            </div>
-          </div>
-          <div class="proc-step" data-reveal>
-            <span class="proc-num">5</span>
-            <div>
-              <h3>Launch & tune</h3>
-              <p>After launch, we review real interactions and keep the agent improving as your business changes.</p>
-            </div>
-          </div>
-        </div>
+    <section class="method" id="method">
+      <div class="section-head" data-reveal>
+        <span class="eyebrow">Method</span>
+        <h2>Sharp implementation. No mystery box.</h2>
+      </div>
+      <div class="method-list">
+        <div class="method-row" data-reveal><span>01</span><h3>Map the work</h3><p>We identify the repeated questions, missed calls, and handoff points that matter first.</p></div>
+        <div class="method-row" data-reveal><span>02</span><h3>Shape the agent</h3><p>We use your FAQs, scripts, policies, and routing rules so the agent fits your business.</p></div>
+        <div class="method-row" data-reveal><span>03</span><h3>Test the edge cases</h3><p>We run realistic scenarios before launch — including the moments where the agent should stop and escalate.</p></div>
+        <div class="method-row" data-reveal><span>04</span><h3>Tune from reality</h3><p>After launch, we review real interactions and tighten answers, handoffs, and follow-up timing.</p></div>
       </div>
     </section>
 
-    <section class="demos">
-      <div class="container narrow">
-        <span class="label">See it work</span>
-        <h2>Try the demos.</h2>
-        <p class="lede">Test the chatbot against real business data, or hear how the receptionist sounds.</p>
-        <div class="demo-cards" data-reveal>
-          <a href="chatbot.html" class="demo-card">
-            <span class="demo-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z"/></svg>
-            </span>
-            <strong>Chatbot demo</strong>
-            <p>Ask questions against a sample knowledge base.</p>
-            <span class="demo-cta">Try it →</span>
-          </a>
-          <a href="voice.html" class="demo-card">
-            <span class="demo-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
-            </span>
-            <strong>Voice demo</strong>
-            <p>Hear how the receptionist handles a real call flow.</p>
-            <span class="demo-cta">Listen →</span>
-          </a>
+    <section class="demos" id="demos">
+      <div class="demo-panel" data-reveal>
+        <div>
+          <span class="eyebrow">See it work</span>
+          <h2>Try the demos before we talk.</h2>
+          <p>Ask the sample chatbot a real question, or listen to a receptionist-style call flow.</p>
+        </div>
+        <div class="demo-actions">
+          <a href="chatbot.html" class="demo-link"><span>Chatbot demo</span><strong>Ask questions →</strong></a>
+          <a href="voice.html" class="demo-link"><span>Voice demo</span><strong>Listen →</strong></a>
         </div>
       </div>
     </section>
 
     <section class="contact" id="contact">
-      <div class="container narrow">
-        <div class="contact-grid">
-          <div class="contact-info" data-reveal>
-            <span class="label">Book a call</span>
-            <h2>Let's find your first automation.</h2>
-            <p>Tell us what workflow you want to improve. We'll recommend the right starting point — no commitment.</p>
-            <div class="contact-links">
-              <span>hello@intraform.ca</span>
-              <span>24-hour response time</span>
-            </div>
+      <div class="contact-grid">
+        <div class="contact-info" data-reveal>
+          <span class="eyebrow">Book a call</span>
+          <h2>Let's find your first automation.</h2>
+          <p>Tell us what workflow you want to improve. We'll recommend the smallest useful starting point — no commitment.</p>
+          <div class="contact-links">
+            <a href="mailto:hello@intraform.ca">hello@intraform.ca</a>
+            <span>24-hour response time</span>
           </div>
-          <form class="contact-form" id="contactForm" action="https://formspree.io/f/xanoozbp" method="POST" data-reveal>
-            <div class="field">
-              <label for="name">Name</label>
-              <input type="text" id="name" name="name" required>
-            </div>
-            <div class="field">
-              <label for="email">Email</label>
-              <input type="email" id="email" name="email" required>
-            </div>
-            <div class="field half">
-              <div>
-                <label for="company">Company</label>
-                <input type="text" id="company" name="company">
-              </div>
-              <div>
-                <label for="subject">Subject</label>
-                <select id="subject" name="subject" required>
-                  <option value="" disabled selected>Select</option>
-                  <option>General</option>
-                  <option>Demo request</option>
-                  <option>Implementation</option>
-                  <option>Partnership</option>
-                </select>
-              </div>
-            </div>
-            <div class="field">
-              <label for="message">Message</label>
-              <textarea id="message" name="message" rows="3" required></textarea>
-            </div>
-            <div class="field check">
-              <input type="checkbox" id="consent" required>
-              <label for="consent">I agree to be contacted</label>
-            </div>
-            <button type="submit" class="btn btn-primary btn-full">
-              Send message
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-            <div class="form-status" id="formStatus" role="alert"></div>
-          </form>
         </div>
+        <form class="contact-form" id="contactForm" action="https://formspree.io/f/xanoozbp" method="POST" data-reveal>
+          <div class="field"><label for="name">Name</label><input type="text" id="name" name="name" required></div>
+          <div class="field"><label for="email">Email</label><input type="email" id="email" name="email" required></div>
+          <div class="field half">
+            <div><label for="company">Company</label><input type="text" id="company" name="company"></div>
+            <div><label for="subject">Subject</label><select id="subject" name="subject" required><option value="" disabled selected>Select</option><option>General</option><option>Demo request</option><option>Implementation</option><option>Partnership</option></select></div>
+          </div>
+          <div class="field"><label for="message">Message</label><textarea id="message" name="message" rows="4" required></textarea></div>
+          <div class="field check"><input type="checkbox" id="consent" required><label for="consent">I agree to be contacted</label></div>
+          <button type="submit" class="btn btn-light btn-full">Send message <span>↗</span></button>
+          <div class="form-status" id="formStatus" role="alert"></div>
+        </form>
       </div>
     </section>
   </main>
 
   <footer>
-    <div class="container narrow">
-      <div class="footer-inner">
-        <div class="footer-brand">
-          <span class="logo-mark">I</span>
-          <span>Intraform</span>
-        </div>
-        <p class="tagline">Smarter agents. Simpler automation.</p>
-        <div class="footer-links">
-          <a href="mailto:hello@intraform.ca">Contact</a>
-          <a href="privacy.html">Privacy</a>
-        </div>
-        <p class="copy">© 2026 Intraform</p>
-      </div>
+    <div class="footer-inner">
+      <div class="footer-brand"><span class="logo-mark">in</span><span>Intraform</span></div>
+      <p>Smarter agents. Simpler automation.</p>
+      <div class="footer-links"><a href="mailto:hello@intraform.ca">Contact</a><a href="privacy.html">Privacy</a></div>
+      <p class="copy">© 2026 Intraform</p>
     </div>
   </footer>
 
