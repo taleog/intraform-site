@@ -136,7 +136,7 @@
   <script>
     (function() {
       const params = new URLSearchParams(location.search);
-      const API = params.get('api') || ('http://' + location.hostname + ':8002');
+      const API = params.get('api') || '';
       const msgs = document.getElementById('chatMsgs');
       const inp  = document.getElementById('chatInput');
       const snd  = document.getElementById('sendBtn');
