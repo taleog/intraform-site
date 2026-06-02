@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120" fill="none">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;600&amp;display=swap');
+      .w600 { font-family: 'Geist', system-ui, sans-serif; font-weight: 600; font-size: 52px; letter-spacing: -0.03em; }
+      .w400 { font-family: 'Geist', system-ui, sans-serif; font-weight: 400; font-size: 52px; letter-spacing: -0.03em; }
+    </style>
+  </defs>
+
+  <!-- Mark: faceted diamond node — reads as an agent node / signal origin -->
+  <g transform="translate(6, 10)">
+    <!-- Outer diamond (frame) -->
+    <path d="M 32 0 L 64 32 L 32 64 L 0 32 Z" fill="none" stroke="currentColor" stroke-width="2" />
+    <!-- Inner diamond (the core / intelligence) -->
+    <path d="M 32 12 L 52 32 L 32 52 L 12 32 Z" fill="currentColor" />
+
+    <!-- Signal line extending right (routing / output) -->
+    <line x1="64" y1="32" x2="84" y2="32" stroke="currentColor" stroke-width="1.5" opacity="0.35" />
+    <!-- Terminal dot at the end of the signal -->
+    <circle cx="86" cy="32" r="2.5" fill="currentColor" opacity="0.25" />
+  </g>
+
+  <!-- Wordmark -->
+  <text x="106" y="76" class="w600" fill="currentColor">intra</text>
+  <text x="238" y="76" class="w400" fill="currentColor" opacity="0.45">form</text>
+</svg>
