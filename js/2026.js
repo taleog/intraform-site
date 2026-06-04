@@ -137,3 +137,18 @@
     requestAnimationFrame(tick);
   }
 })();
+
+// Word rail cycle - manual rotation for cross-browser/GPU reliability
+(function(){
+  var rail = document.querySelector('.word-rail');
+  if(!rail) return;
+  var spans = rail.children;
+  if(spans.length < 2) return;
+  var i = 0;
+  spans[i].classList.add('active');
+  setInterval(function(){
+    spans[i].classList.remove('active');
+    i = (i + 1) % spans.length;
+    spans[i].classList.add('active');
+  }, 2500);
+})();
