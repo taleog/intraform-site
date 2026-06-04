@@ -144,11 +144,13 @@
   if(!rail) return;
   var spans = rail.children;
   if(spans.length < 2) return;
+  // Remove the trailing duplicate-answer span for a clean cycle
+  var count = Math.min(spans.length, 4);  // answer, route, follow up, transform
   var i = 0;
   spans[i].classList.add('active');
   setInterval(function(){
     spans[i].classList.remove('active');
-    i = (i + 1) % spans.length;
+    i = (i + 1) % count;
     spans[i].classList.add('active');
   }, 2500);
 })();
