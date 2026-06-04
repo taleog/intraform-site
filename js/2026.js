@@ -142,15 +142,18 @@
 (function(){
   var rail = document.querySelector('.word-rail');
   if(!rail) return;
-  var spans = rail.children;
+  var spans = Array.from(rail.children);
+  // Hide the trailing duplicate-answer span (used for seamless CSS animation, not needed here)
+  if(spans.length > 4) {
+    spans[4].style.display = 'none';
+    spans.pop();
+  }
   if(spans.length < 2) return;
-  // Remove the trailing duplicate-answer span for a clean cycle
-  var count = Math.min(spans.length, 4);  // answer, route, follow up, transform
   var i = 0;
   spans[i].classList.add('active');
   setInterval(function(){
     spans[i].classList.remove('active');
-    i = (i + 1) % count;
+    i = (i + 1) % spans.length;
     spans[i].classList.add('active');
   }, 2500);
 })();
