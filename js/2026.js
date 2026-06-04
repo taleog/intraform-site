@@ -138,25 +138,23 @@
   }
 })();
 
-// Word rail cycle - manual rotation, display-based, no CSS transition
+// Word rail cycle - smooth opacity crossfade using .active class
 (function(){
   var rail = document.querySelector('.word-rail');
   if(!rail) return;
   var spans = Array.from(rail.children);
-  // Hide trailing duplicate and keep only real words
-  while(spans.length > 4) {
-    var dup = spans.pop();
-    dup.style.display = 'none';
+  // Hide the trailing duplicate-answer span used for seamless CSS animation
+  if(spans.length > 4) {
+    spans[4].style.display = 'none';
+    spans.pop();
   }
   if(spans.length < 2) return;
-  // Show first, hide rest
-  for(var j=0;j<spans.length;j++){
-    spans[j].style.display = (j===0) ? 'block' : 'none';
-  }
+  // Show first word
+  spans[0].classList.add('active');
   var i = 0;
   setInterval(function(){
-    spans[i].style.display = 'none';
+    spans[i].classList.remove('active');
     i = (i + 1) % spans.length;
-    spans[i].style.display = 'block';
+    spans[i].classList.add('active');
   }, 2500);
 })();
