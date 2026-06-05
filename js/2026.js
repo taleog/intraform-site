@@ -4,6 +4,77 @@
   const $$ = (s, r=document) => Array.from(r.querySelectorAll(s));
 
   document.addEventListener('DOMContentLoaded', () => {
+    const initVantaBackground = () => {
+      const bg = $('#vanta-bg');
+      if (!bg || !window.VANTA || !window.VANTA.NET) return;
+
+      const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const isMobile = window.innerWidth < 720;
+      let effect;
+      let resizeTimer;
+
+      const fitToDocument = () => {
+        const doc = document.documentElement;
+        const height = Math.max(
+          document.body ? document.body.scrollHeight : 0,
+          doc ? doc.scrollHeight : 0,
+          window.innerHeight
+        );
+        bg.style.height = `${height}px`;
+        if (effect && typeof effect.resize === 'function') {
+          requestAnimationFrame(() => effect.resize());
+        }
+      };
+
+      fitToDocument();
+
+      const start = () => {
+        effect = window.VANTA.NET({
+          el: bg,
+          mouseControls: false,
+          touchControls: false,
+          gyroControls: false,
+          minHeight: window.innerHeight,
+          minWidth: 200,
+          scale: 1.35,
+          scaleMobile: 1.7,
+          color: 0x6a6a6a,
+          backgroundColor: 0x030303,
+          points: isMobile ? 9 : 16,
+          maxDistance: isMobile ? 18 : 25,
+          spacing: isMobile ? 19 : 14,
+          showDots: false
+        });
+
+        if (effect && effect.renderer && typeof effect.renderer.setPixelRatio === 'function') {
+          effect.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1));
+        }
+
+        fitToDocument();
+      };
+
+      if (reduceMotion) {
+        bg.classList.add('vanta-reduced-motion');
+        return;
+      }
+
+      if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(start, { timeout: 700 });
+      } else {
+        window.requestAnimationFrame(start);
+      }
+
+      window.addEventListener('resize', () => {
+        window.clearTimeout(resizeTimer);
+        resizeTimer = window.setTimeout(fitToDocument, 160);
+      }, { passive: true });
+      window.addEventListener('load', fitToDocument, { once: true });
+      window.setTimeout(fitToDocument, 450);
+      window.setTimeout(fitToDocument, 1400);
+    };
+
+    initVantaBackground();
+
     const revealEls = $$('[data-reveal]');
     if (revealEls.length) {
       const observer = new IntersectionObserver((entries) => {
