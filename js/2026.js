@@ -12,20 +12,12 @@
       let effect;
       let resizeTimer;
 
-      const fitToDocument = () => {
-        const doc = document.documentElement;
-        const height = Math.max(
-          document.body ? document.body.scrollHeight : 0,
-          doc ? doc.scrollHeight : 0,
-          window.innerHeight
-        );
-        bg.style.height = `${height}px`;
+      const fitToHero = () => {
+        bg.style.height = '';
         if (effect && typeof effect.resize === 'function') {
           requestAnimationFrame(() => effect.resize());
         }
       };
-
-      fitToDocument();
 
       const start = () => {
         effect = window.VANTA.TOPOLOGY({
@@ -41,7 +33,7 @@
           backgroundColor: 0x000000
         });
 
-        fitToDocument();
+        fitToHero();
       };
 
       if (reduceMotion) {
@@ -57,11 +49,9 @@
 
       window.addEventListener('resize', () => {
         window.clearTimeout(resizeTimer);
-        resizeTimer = window.setTimeout(fitToDocument, 160);
+        resizeTimer = window.setTimeout(fitToHero, 160);
       }, { passive: true });
-      window.addEventListener('load', fitToDocument, { once: true });
-      window.setTimeout(fitToDocument, 450);
-      window.setTimeout(fitToDocument, 1400);
+      window.addEventListener('load', fitToHero, { once: true });
     };
 
     initVantaBackground();
