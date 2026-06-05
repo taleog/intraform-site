@@ -12,14 +12,24 @@
       let effect;
       let resizeTimer;
 
-      const fitToHero = () => {
-        bg.style.height = '';
+      const fitToPage = () => {
+        const doc = document.documentElement;
+        const body = document.body;
+        const height = Math.max(
+          window.innerHeight || 0,
+          doc ? doc.scrollHeight : 0,
+          body ? body.scrollHeight : 0,
+          bg.scrollHeight || 0
+        );
+        bg.style.height = `${height}px`;
         if (effect && typeof effect.resize === 'function') {
           requestAnimationFrame(() => effect.resize());
         }
       };
 
       const start = () => {
+        fitToPage();
+
         effect = window.VANTA.TOPOLOGY({
           el: bg,
           mouseControls: true,
@@ -33,7 +43,7 @@
           backgroundColor: 0x000000
         });
 
-        fitToHero();
+        requestAnimationFrame(fitToPage);
       };
 
       if (reduceMotion) {
@@ -49,9 +59,10 @@
 
       window.addEventListener('resize', () => {
         window.clearTimeout(resizeTimer);
-        resizeTimer = window.setTimeout(fitToHero, 160);
+        resizeTimer = window.setTimeout(fitToPage, 160);
       }, { passive: true });
-      window.addEventListener('load', fitToHero, { once: true });
+      window.addEventListener('load', fitToPage, { once: true });
+      window.setTimeout(fitToPage, 1200);
     };
 
     initVantaBackground();
