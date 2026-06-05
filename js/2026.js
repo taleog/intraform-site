@@ -30,22 +30,30 @@
       };
 
       const primeMobileSnapshot = () => {
-        if (!isMobileCanvas) return;
+        if (!isMobileCanvas) return false;
+        if (bg.classList.contains('vanta-mobile-static')) return true;
         const canvas = bg.querySelector('canvas');
-        if (!canvas || !canvas.width || !canvas.height) return;
+        if (!canvas || !canvas.width || !canvas.height) return false;
         try {
           bg.style.backgroundImage = `url(${canvas.toDataURL('image/jpeg', 0.62)})`;
           bg.style.backgroundSize = '100% 100%';
           bg.style.backgroundRepeat = 'no-repeat';
           bg.style.backgroundPosition = 'top center';
-          bg.classList.add('vanta-has-snapshot');
+          bg.classList.add('vanta-has-snapshot', 'vanta-mobile-static');
+          window.setTimeout(() => {
+            if (effect && typeof effect.destroy === 'function') {
+              try { effect.destroy(); } catch (_) {}
+              effect = null;
+            }
+          }, 80);
+          return true;
         } catch (_) {
-          // Snapshot is only a mobile scroll fallback; animation can continue without it.
+          return false;
         }
       };
 
       const queueMobileSnapshot = (delay = 900) => {
-        if (!isMobileCanvas) return;
+        if (!isMobileCanvas || bg.classList.contains('vanta-mobile-static')) return;
         window.setTimeout(() => requestAnimationFrame(primeMobileSnapshot), delay);
       };
 
@@ -54,7 +62,7 @@
 
         effect = window.VANTA.TOPOLOGY({
           el: bg,
-          mouseControls: true,
+          mouseControls: !isMobileCanvas,
           touchControls: !isMobileCanvas,
           gyroControls: false,
           minHeight: 200.00,
@@ -86,7 +94,7 @@
       window.addEventListener('resize', () => {
         window.clearTimeout(resizeTimer);
         resizeTimer = window.setTimeout(() => {
-          if (isMobileCanvas) {
+          if (isMobileCanvas && !bg.classList.contains('vanta-mobile-static')) {
             bg.classList.remove('vanta-has-snapshot');
             bg.style.backgroundImage = '';
           }
