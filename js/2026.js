@@ -12,6 +12,7 @@
       const isMobileCanvas = window.matchMedia && window.matchMedia('(max-width: 760px)').matches;
       let effect;
       let resizeTimer;
+      let scrollTimer;
 
       const fitToPage = () => {
         const doc = document.documentElement;
@@ -26,6 +27,26 @@
         if (effect && typeof effect.resize === 'function') {
           requestAnimationFrame(() => effect.resize());
         }
+      };
+
+      const primeMobileSnapshot = () => {
+        if (!isMobileCanvas) return;
+        const canvas = bg.querySelector('canvas');
+        if (!canvas || !canvas.width || !canvas.height) return;
+        try {
+          bg.style.backgroundImage = `url(${canvas.toDataURL('image/jpeg', 0.62)})`;
+          bg.style.backgroundSize = '100% 100%';
+          bg.style.backgroundRepeat = 'no-repeat';
+          bg.style.backgroundPosition = 'top center';
+          bg.classList.add('vanta-has-snapshot');
+        } catch (_) {
+          // Snapshot is only a mobile scroll fallback; animation can continue without it.
+        }
+      };
+
+      const queueMobileSnapshot = (delay = 900) => {
+        if (!isMobileCanvas) return;
+        window.setTimeout(() => requestAnimationFrame(primeMobileSnapshot), delay);
       };
 
       const start = () => {
@@ -44,7 +65,11 @@
           backgroundColor: 0x000000
         });
 
-        requestAnimationFrame(fitToPage);
+        requestAnimationFrame(() => {
+          fitToPage();
+          queueMobileSnapshot(900);
+          queueMobileSnapshot(2200);
+        });
       };
 
       if (reduceMotion) {
@@ -60,10 +85,32 @@
 
       window.addEventListener('resize', () => {
         window.clearTimeout(resizeTimer);
-        resizeTimer = window.setTimeout(fitToPage, 160);
+        resizeTimer = window.setTimeout(() => {
+          if (isMobileCanvas) {
+            bg.classList.remove('vanta-has-snapshot');
+            bg.style.backgroundImage = '';
+          }
+          fitToPage();
+          queueMobileSnapshot(1000);
+        }, 160);
       }, { passive: true });
-      window.addEventListener('load', fitToPage, { once: true });
-      window.setTimeout(fitToPage, 1200);
+
+      if (isMobileCanvas) {
+        window.addEventListener('scroll', () => {
+          bg.classList.add('vanta-mobile-scrolling');
+          window.clearTimeout(scrollTimer);
+          scrollTimer = window.setTimeout(() => bg.classList.remove('vanta-mobile-scrolling'), 180);
+        }, { passive: true });
+      }
+
+      window.addEventListener('load', () => {
+        fitToPage();
+        queueMobileSnapshot(900);
+      }, { once: true });
+      window.setTimeout(() => {
+        fitToPage();
+        queueMobileSnapshot(900);
+      }, 1200);
     };
 
     initVantaBackground();
