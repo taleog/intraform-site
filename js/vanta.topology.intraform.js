@@ -1,12 +1,12 @@
-/*! Intraform organized topology background.
- * Keeps the p5 + VANTA.TOPOLOGY API requested for the homepage, but replaces the
- * stock random particle seeding with an even jittered field so the full-page
- * canvas does not bunch up or leave large empty areas.
+/*! Intraform Vanta TOPOLOGY wrapper.
+ * Keeps the original p5/Vanta topology flow-field look, but seeds particles with
+ * stratified randomness and scales particle count for a full-page canvas so it
+ * does not clump into one area or turn into repeated circles.
  */
 (() => {
   const root = window.VANTA || (window.VANTA = {});
 
-  const toRgb = (value) => {
+  const rgb = (value) => {
     const hex = typeof value === 'number' ? value : 0x505050;
     return [(hex >> 16) & 255, (hex >> 8) & 255, hex & 255];
   };
@@ -28,14 +28,19 @@
     const el = typeof options.el === 'string' ? document.querySelector(options.el) : options.el;
     if (!el || !window.p5) return null;
 
-    let sketch;
+    let p5i;
     let particles = [];
+    let flow = [];
+    let cols = 0;
+    let rows = 0;
     let frame = 0;
-    let mouse = { x: 0.5, y: 0.5, active: false };
-    const color = toRgb(options.color);
-    const bg = toRgb(options.backgroundColor);
+    let resizeQueued = false;
+    let mouse = { x: 0, y: 0, active: false };
+    const stroke = rgb(options.color);
+    const bg = rgb(options.backgroundColor);
 
-    const getHeight = () => Math.max(
+    const widthForEl = () => Math.max(options.minWidth, el.clientWidth || window.innerWidth || 0);
+    const heightForEl = () => Math.max(
       options.minHeight,
       el.clientHeight || 0,
       document.body ? document.body.scrollHeight : 0,
@@ -43,113 +48,160 @@
       window.innerHeight || 0
     );
 
-    const getWidth = () => Math.max(options.minWidth, el.clientWidth || window.innerWidth || 0);
+    const wrap = (value, max) => ((value % max) + max) % max;
 
-    const api = {
-      resize() {
-        if (!sketch || !sketch._renderer) return;
-        const width = Math.round(getWidth());
-        const height = Math.round(getHeight());
-        el.style.height = `${height}px`;
-        sketch.resizeCanvas(width, height);
-        buildField(width, height);
-        prewarm(7);
-      },
-      destroy() {
-        if (sketch && typeof sketch.remove === 'function') sketch.remove();
-        particles = [];
-      },
-      setOptions(next = {}) {
-        Object.assign(options, next);
+    const fieldVector = (p, x, y, radius) => {
+      let high = 0;
+      let low = 1;
+      let highX = 0;
+      let highY = 0;
+      let lowX = 0;
+      let lowY = 0;
+
+      for (let i = 0; i < 64; i++) {
+        const angle = (i / 64) * p.TAU;
+        const px = x + p.cos(angle) * radius;
+        const py = y + p.sin(angle) * radius;
+        const n = p.noise(px, py);
+        if (n > high) {
+          high = n;
+          highX = px;
+          highY = py;
+        }
+        if (n < low) {
+          low = n;
+          lowX = px;
+          lowY = py;
+        }
+      }
+
+      const v = p.createVector(lowX - highX, lowY - highY);
+      return v.normalize().mult(high - low);
+    };
+
+    const buildFlow = (p) => {
+      cols = Math.ceil((p.width + 200) / 10);
+      rows = Math.ceil((p.height + 200) / 10);
+      flow = [];
+      for (let y = 0; y < rows; y++) {
+        const row = [];
+        for (let x = 0; x < cols; x++) {
+          row.push(fieldVector(p, 0.003 * x, 0.003 * y, 0.1));
+        }
+        flow.push(row);
       }
     };
 
-    const buildField = (width, height) => {
+    const seedParticles = (p) => {
       particles = [];
-      const mobile = width < 720;
-      // One particle per jittered cell: organized coverage, still randomized.
-      const spacing = mobile ? 36 : 28;
-      const cols = Math.ceil((width + spacing * 2) / spacing);
-      const rows = Math.ceil((height + spacing * 2) / spacing);
+      const area = p.width * p.height;
+      const target = Math.round(area / 650);
+      const count = Math.max(4800, Math.min(target, 11500));
+      const gridCols = Math.ceil(Math.sqrt(count * (p.width + 200) / (p.height + 200)));
+      const gridRows = Math.ceil(count / gridCols);
+      const cellW = (p.width + 200) / gridCols;
+      const cellH = (p.height + 200) / gridRows;
       let seed = 0;
 
-      for (let y = -1; y < rows - 1; y++) {
-        for (let x = -1; x < cols - 1; x++) {
-          const homeX = (x + 0.5 + sketch.random(-0.24, 0.24)) * spacing;
-          const homeY = (y + 0.5 + sketch.random(-0.24, 0.24)) * spacing;
+      for (let gy = 0; gy < gridRows; gy++) {
+        for (let gx = 0; gx < gridCols && particles.length < count; gx++) {
+          const x = (gx + p.random(0.14, 0.86)) * cellW;
+          const y = (gy + p.random(0.14, 0.86)) * cellH;
           particles.push({
-            homeX,
-            homeY,
-            x: homeX,
-            y: homeY,
-            px: homeX,
-            py: homeY,
-            phase: sketch.random(sketch.TAU),
-            speed: sketch.random(0.004, 0.010),
-            drift: sketch.random(mobile ? 10 : 12, mobile ? 23 : 28),
+            prev: p.createVector(x, y),
+            pos: p.createVector(x, y),
+            vel: p.createVector(0, 0),
+            acc: p.createVector(0, 0),
             seed: seed++
           });
         }
       }
     };
 
-    const paint = (warm = false) => {
-      if (!particles.length) return;
-      // Slow fade keeps the topology alive without creating dark blobs.
-      sketch.noStroke();
-      sketch.fill(bg[0], bg[1], bg[2], warm ? 16 : 8);
-      sketch.rect(0, 0, sketch.width, sketch.height);
+    const advance = (p, warm = false) => {
+      p.translate(-100, -100);
+      const maxX = p.width + 200;
+      const maxY = p.height + 200;
+      const mx = mouse.active && options.mouseControls ? (mouse.x - 0.5) * 0.018 : 0;
+      const my = mouse.active && options.mouseControls ? (mouse.y - 0.5) * 0.018 : 0;
 
-      sketch.stroke(color[0], color[1], color[2], warm ? 52 : 36);
-      sketch.strokeWeight(1);
+      for (const particle of particles) {
+        const sx = p.constrain(particle.pos.x, 0, maxX);
+        const sy = p.constrain(particle.pos.y, 0, maxY);
+        const vector = flow[Math.floor(sy / 10)] && flow[Math.floor(sy / 10)][Math.floor(sx / 10)];
 
-      const t = frame * 0.010;
-      const mx = mouse.active && options.mouseControls ? (mouse.x - 0.5) * 0.7 : 0;
-      const my = mouse.active && options.mouseControls ? (mouse.y - 0.5) * 0.7 : 0;
+        particle.prev.x = particle.pos.x;
+        particle.prev.y = particle.pos.y;
+        particle.pos.x = wrap(particle.pos.x + particle.vel.x, maxX);
+        particle.pos.y = wrap(particle.pos.y + particle.vel.y, maxY);
+        particle.vel.add(particle.acc).normalize().mult(2.15);
+        particle.acc = p.createVector(mx, my);
+        if (vector) particle.acc.add(vector).mult(3);
+      }
 
-      for (const p of particles) {
-        const n1 = sketch.noise(p.homeX * 0.0021, p.homeY * 0.0021, t + p.seed * 0.0007);
-        const n2 = sketch.noise(p.homeY * 0.0028, p.homeX * 0.0028, t * 0.7 + p.seed * 0.0011);
-        const angle = (n1 * 2.6 + n2 * 1.4 + mx + my) * sketch.TAU;
-        const breathe = Math.sin(frame * p.speed + p.phase);
-        const length = p.drift * (0.72 + n2 * 0.48);
-
-        p.px = p.x;
-        p.py = p.y;
-        p.x = p.homeX + Math.cos(angle) * length + Math.cos(p.phase + frame * p.speed) * 3;
-        p.y = p.homeY + Math.sin(angle) * length + breathe * 3;
-
-        // Skip very long jumps after resize/wrap so the field stays clean.
-        if (Math.hypot(p.x - p.px, p.y - p.py) < 34) {
-          sketch.line(p.px, p.py, p.x, p.y);
+      p.strokeWeight(1);
+      p.stroke(stroke[0], stroke[1], stroke[2], warm ? 18 : 13);
+      for (const particle of particles) {
+        if (window.p5.Vector.dist(particle.prev, particle.pos) < 10) {
+          p.line(particle.prev.x, particle.prev.y, particle.pos.x, particle.pos.y);
         }
       }
 
-      frame += warm ? 2 : 1;
+      p.translate(100, 100);
+      frame += 1;
     };
 
-    const prewarm = (passes) => {
-      if (!sketch) return;
-      sketch.background(bg[0], bg[1], bg[2], 255);
-      for (let i = 0; i < passes; i++) paint(true);
+    const rebuild = (p, prewarm = true) => {
+      const width = Math.round(widthForEl());
+      const height = Math.round(heightForEl());
+      el.style.height = `${height}px`;
+      p.resizeCanvas(width, height);
+      p.pixelDensity(1);
+      p.background(bg[0], bg[1], bg[2], 255);
+      buildFlow(p);
+      seedParticles(p);
+      if (prewarm) {
+        p.push();
+        for (let i = 0; i < 70; i++) advance(p, true);
+        p.pop();
+      }
     };
 
-    sketch = new window.p5((p) => {
+    const api = {
+      resize() {
+        if (!p5i || !p5i._renderer || resizeQueued) return;
+        resizeQueued = true;
+        window.requestAnimationFrame(() => {
+          resizeQueued = false;
+          rebuild(p5i, true);
+        });
+      },
+      destroy() {
+        if (p5i && typeof p5i.remove === 'function') p5i.remove();
+        particles = [];
+        flow = [];
+      },
+      setOptions(next = {}) {
+        Object.assign(options, next);
+      }
+    };
+
+    p5i = new window.p5((p) => {
       p.setup = () => {
-        sketch = p;
-        const width = Math.round(getWidth());
-        const height = Math.round(getHeight());
-        el.style.height = `${height}px`;
-        const canvas = p.createCanvas(width, height);
-        canvas.parent(el);
+        p5i = p;
+        p.createCanvas(Math.round(widthForEl()), Math.round(heightForEl())).parent(el);
         p.pixelDensity(1);
-        p.frameRate(24);
+        p.frameRate(30);
         p.smooth();
-        buildField(width, height);
-        prewarm(16);
+        p.noFill();
+        rebuild(p, true);
       };
 
-      p.draw = () => paint(false);
+      p.draw = () => {
+        p.push();
+        advance(p, false);
+        p.pop();
+      };
     });
 
     if (options.mouseControls) {
