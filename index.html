@@ -14,15 +14,16 @@
   <meta property="og:image" content="https://intraform.ca/intraform-icon.png">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" type="image/png" href="intraform-icon.png" />
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/2026.css?v=20260604edit10">
+  <link rel="stylesheet" href="css/2026.css?v=20260604edit16">
 </head>
 <body>
   <a href="#main" class="skip-link">Skip to main</a>
-  <div class="grain" aria-hidden="true"></div>
-  <canvas id="formationCanvas" aria-hidden="true"></canvas>
+  <div id="vanta-bg" aria-hidden="true"></div>
 
   <nav class="nav" aria-label="Primary">
     <div class="nav-inner">
@@ -127,41 +128,6 @@
       </div>
     </section>
 
-    <section class="transform" aria-label="Scroll transformation">
-      <div class="transform-sticky">
-        <div class="transform-copy">
-          <span class="eyebrow">How it changes the day</span>
-          <h2 data-morph-title>Missed requests become handled requests.</h2>
-          <p data-morph-copy>Scroll through the workflow: each step takes a messy customer moment and turns it into a clean, logged action.</p>
-        </div>
-        <div class="signal-system" aria-hidden="true" data-stage="0">
-          <div class="signal-orbit orbit-a"></div>
-          <div class="signal-orbit orbit-b"></div>
-          <div class="signal-orbit orbit-c"></div>
-          <div class="signal-beam beam-a"></div>
-          <div class="signal-beam beam-b"></div>
-          <div class="signal-beam beam-c"></div>
-          <div class="signal-line"></div>
-          <div class="signal-packet p1"></div>
-          <div class="signal-packet p2"></div>
-          <div class="signal-packet p3"></div>
-          <div class="signal-packet p4"></div>
-          <div class="signal-node n1"><strong>Question</strong><span>customer asks</span></div>
-          <div class="signal-node n2"><strong>Intent</strong><span>need detected</span></div>
-          <div class="signal-node n3"><strong>Handoff</strong><span>team-ready</span></div>
-          <div class="signal-node n4"><strong>Follow-up</strong><span>next action</span></div>
-          <div class="signal-core"><span>IN</span><small>agent layer</small></div>
-          <div class="signal-output"><span>clean record</span><strong>answered · routed · logged</strong></div>
-        </div>
-      </div>
-      <div class="transform-steps">
-        <div class="transform-step" data-morph="Capture|Customers ask. The agent collects the message, caller intent, and business context without making your team stop."></div>
-        <div class="transform-step" data-morph="Clarify|The agent checks the knowledge base, asks one useful question when needed, and keeps the conversation moving."></div>
-        <div class="transform-step" data-morph="Route|When a human should step in, the agent sends a concise handoff instead of a vague notification."></div>
-        <div class="transform-step" data-morph="Improve|Launch is not the finish line. Real conversations reveal what to tune next."></div>
-      </div>
-    </section>
-
     <section class="contact" id="contact">
       <div class="contact-grid">
         <div class="contact-info" data-reveal>
@@ -198,7 +164,32 @@
     </div>
   </footer>
 
-  <script src="js/2026.js?v=20260604edit4" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/p5.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.topology.min.js"></script>
+  <script>
+    (function () {
+      var bg = document.getElementById('vanta-bg');
+      if (!bg || !window.VANTA || !window.VANTA.TOPOLOGY) return;
+
+      var effect = window.VANTA.TOPOLOGY({
+        el: bg,
+        mouseControls: false,
+        touchControls: false,
+        gyroControls: false,
+        minHeight: 200.00,
+        minWidth: 200.00,
+        scale: 1.00,
+        scaleMobile: 1.00,
+        color: 0x505050,
+        backgroundColor: 0x000000
+      });
+
+      requestAnimationFrame(function () {
+        if (effect && typeof effect.resize === 'function') effect.resize();
+      });
+    })();
+  </script>
+  <script src="js/2026.js?v=20260604edit9" defer></script>
   <script src="js/form.js" defer></script>
 </body>
 </html>
