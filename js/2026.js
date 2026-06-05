@@ -9,6 +9,7 @@
       if (!bg || !window.VANTA || !window.VANTA.TOPOLOGY) return;
 
       const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const isMobileCanvas = window.matchMedia && window.matchMedia('(max-width: 760px)').matches;
       let effect;
       let resizeTimer;
 
@@ -33,7 +34,7 @@
         effect = window.VANTA.TOPOLOGY({
           el: bg,
           mouseControls: true,
-          touchControls: true,
+          touchControls: !isMobileCanvas,
           gyroControls: false,
           minHeight: 200.00,
           minWidth: 200.00,
