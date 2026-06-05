@@ -6,10 +6,9 @@
   document.addEventListener('DOMContentLoaded', () => {
     const initVantaBackground = () => {
       const bg = $('#vanta-bg');
-      if (!bg || !window.VANTA || !window.VANTA.NET) return;
+      if (!bg || !window.VANTA || !window.VANTA.TOPOLOGY) return;
 
       const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const isMobile = window.innerWidth < 720;
       let effect;
       let resizeTimer;
 
@@ -29,26 +28,18 @@
       fitToDocument();
 
       const start = () => {
-        effect = window.VANTA.NET({
+        effect = window.VANTA.TOPOLOGY({
           el: bg,
-          mouseControls: false,
-          touchControls: false,
+          mouseControls: true,
+          touchControls: true,
           gyroControls: false,
-          minHeight: window.innerHeight,
-          minWidth: 200,
-          scale: 1.35,
-          scaleMobile: 1.7,
-          color: 0x6a6a6a,
-          backgroundColor: 0x030303,
-          points: isMobile ? 9 : 16,
-          maxDistance: isMobile ? 18 : 25,
-          spacing: isMobile ? 19 : 14,
-          showDots: false
+          minHeight: 200.00,
+          minWidth: 200.00,
+          scale: 1.00,
+          scaleMobile: 1.00,
+          color: 0x505050,
+          backgroundColor: 0x000000
         });
-
-        if (effect && effect.renderer && typeof effect.renderer.setPixelRatio === 'function') {
-          effect.renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1));
-        }
 
         fitToDocument();
       };
