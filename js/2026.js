@@ -115,7 +115,7 @@
           minWidth: 200.00,
           scale: 1.00,
           scaleMobile: 1.00,
-          color: 0x686868,
+          color: 0xc8c8c8,
           backgroundColor: 0x000000
         });
         bg.classList.add('vanta-active');
